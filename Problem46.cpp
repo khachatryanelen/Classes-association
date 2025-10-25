@@ -34,6 +34,12 @@ class CarEngine{
         CarEngine(bool run){
             running=run;
         }
+        CarEngine& operator =(const CarEngine& other){
+            if(this!=&other){
+                this->running=other.running;
+            }
+            return *this;
+        }
         ~CarEngine(){}
     bool getTheState(){
         return running;
@@ -61,6 +67,19 @@ class Car{
         m_model=model;
         m_engine.setRunning(running);
         m_driver=driver;
+    }
+    Car(const Car& other){
+        this->m_model=other.m_model;
+        this->m_engine=other.m_engine;
+        this->m_driver=other.m_driver;
+    }
+    Car& operator =(const Car& other){
+        if(this!=&other){
+            this->m_model=other.m_model;
+            this->m_engine=other.m_engine;
+            this->m_driver=other.m_driver;
+        }
+        return *this;
     }
     ~Car(){}
     std::string getModel(){
