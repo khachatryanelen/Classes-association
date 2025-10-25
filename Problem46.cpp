@@ -3,16 +3,15 @@
 
 class CarEngine;
 
+
 class Driver{
     private:
         std::string m_name;
         std::string m_gender;
-        CarEngine* m_carEngine;
     public:
-    Driver(const std::string& name,const std::string& gender,CarEngine* carEngine){
+    Driver(const std::string& name,const std::string& gender){
         m_name=name;
         m_gender=gender;
-        m_carEngine=carEngine;
     }
     ~Driver(){}
     
@@ -22,28 +21,27 @@ class Driver{
     std::string getGender(){
         return m_gender;
     }
-    CarEngine* getCarEngine(){
-        return m_carEngine;
-    }
 };
 
 class CarEngine{
     private:
         bool running;
-        Driver* driver;
-        
+
     public:
-        CarEngine(bool run,Driver* dr){
+        CarEngine(){
+            running=false;
+        }
+        CarEngine(bool run){
             running=run;
-            driver=dr;
         }
         ~CarEngine(){}
     bool getTheState(){
         return running;
     }
-    Driver* getDriver(){
-        return driver;
+    void setRunning(bool run){
+        running=run;
     }
+
     void startRunning(){
         std::cout<<"Engine is running. "<<std::endl;
         running=true;
@@ -52,19 +50,50 @@ class CarEngine{
         std::cout<<"Engine is stopped. "<<std::endl;
         running=false;
     }
-    void changeDriver(Driver* newDriver){
-        driver=newDriver;
-        std::cout<<"The driver now is: "<<driver->getName()<<std::endl;
+};
+class Car{
+    private:
+        CarEngine m_engine;
+        std::string m_model;
+        Driver* m_driver;
+    public:
+    Car(const std::string& model,bool running,Driver* driver){
+        m_model=model;
+        m_engine.setRunning(running);
+        m_driver=driver;
+    }
+    ~Car(){}
+    std::string getModel(){
+        return m_model;
+    }
+    Driver* getDriver(){
+        return m_driver;
+    }
+    void startCar() {
+        std::cout << "Car " << m_model << " is starting..." << std::endl;
+        m_engine.startRunning();
+    }
 
+    void stopCar() {
+        std::cout << "Car " << m_model << " is stopping..." << std::endl;
+        m_engine.stopRunning();
+    }
+    void changeDriver(Driver* newDriver){
+        m_driver=newDriver;
+        std::cout<<"The driver now is: "<<m_driver->getName()<<std::endl;
     }
 };
 
 int main(int argc,const char* argv[]){
-    CarEngine engine(false,nullptr);
-    Driver driver("Mesrop","female",&engine);
-    engine.changeDriver(&driver);
-    
-    engine.startRunning();
+    Driver driver1("Mesrop", "male");
+    Car myCar("Toyota ", false, &driver1);
+
+    myCar.startCar();
+
+    Driver driver2("Elena", "female");
+    myCar.changeDriver(&driver2);
+
+    myCar.stopCar();
     
     return 0;
 }
