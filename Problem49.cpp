@@ -35,7 +35,10 @@
         Matrix& operator =(const Matrix& other){
             if(this!=&other){
                 if(this->m_rows!=other.m_rows || this->m_columns!=other.m_columns){
-                    this->~Matrix();
+                    for(int i=0;i<m_rows;i++){
+                        delete[] m_matrix[i];
+                    }
+                    delete[] m_matrix;
                     
                     this->m_rows=other.m_rows;
                     this->m_columns=other.m_columns;
@@ -84,6 +87,37 @@
             }
             
         }
+        void rotate(){
+            if(m_rows!=m_columns){
+                std::cout <<"Can't rotate"<<std::endl;
+            }
+            else{
+                (*this).rotateAboutDiagonal();
+                (*this).rotateAboutMid();
+            }
+        }
+        private:
+            void rotateAboutDiagonal(){
+                int temp;
+                for(int i=0;i<m_rows;i++){
+                    for(int j=0;j<i;j++){
+                        temp=m_matrix[i][j];
+                        m_matrix[i][j]=m_matrix[j][i];
+                        m_matrix[j][i]=temp;
+                    }
+                }
+            }
+            void rotateAboutMid(){
+                int temp;
+                for(int i=0;i<m_rows;i++){
+                    for(int j=0;j<m_columns/2;j++){
+                        temp=m_matrix[i][j];
+                        m_matrix[i][j]=m_matrix[i][m_rows-j-1];
+                        m_matrix[i][m_rows-j-1]=temp;
+                    }
+                }
+            }
+        public:
         void print(){
             for(int i=0;i<m_rows;i++){
                 for(int j=0;j<m_columns;j++){
@@ -102,30 +136,15 @@
 int main(int argc, const char* argv[]){
     Matrix* A=new Matrix(4,7);
     
-    Matrix B(5,7);
-    B.init();
-    B.print();
-    std::cout<<std::endl;
     
     Matrix C(4,4);
     C.init();
     C.print();
     std::cout<<std::endl;
-    C.set(3,2,0);
+    C.rotate();
+    C.print();
     std::cout<<std::endl;
-    std::cout<<C.get(3,2)<<std::endl;
-    
-    Matrix D;
-    D.init();
-    D.print();
-    std::cout<<std::endl;
-    for(int i=0;i<D.getRows();i++){
-        for(int j=0;j<D.getColumns();j++){
-            D.set(i,j,5);
-        }
-    }
-    D.print();
-    
+
     delete A;
 
     return 0;

@@ -2,8 +2,39 @@
 #include <string>
 
 class CarEngine;
+class Car;
 
-
+class Parking{
+  private:
+    std::string m_parkingName;
+    int m_capacity;
+    int count;
+    Car** cars;
+public:
+    Parking(const std::string& park,int capacity){
+        m_capacity=capacity;
+        m_parkingName=park;
+        count=0;
+        cars=new Car*[capacity];
+    }
+    ~Parking(){
+        delete[] cars;
+    }
+    int getCapacity(){
+        return m_capacity;
+    }
+    int getCount(){
+        return count;
+    }
+    void parkCar(Car* newCar){
+        if(count>=m_capacity){
+            std::cout<<"There is no free place! "<<std::endl;
+        }
+        else{
+            cars[count++]=newCar;
+        }
+    }
+};
 class Driver{
     private:
         std::string m_name;
