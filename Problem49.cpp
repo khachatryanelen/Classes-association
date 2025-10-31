@@ -63,6 +63,43 @@
             }
             delete[] m_matrix;
         }
+        Matrix& operator++(){
+            for(int i=0;i<m_rows;i++){
+                for(int j=0;j<m_columns;j++){
+                    m_matrix[i][j]++;;
+                }
+            }
+            return *this;
+        }
+        Matrix operator++(int){
+            Matrix temp=*this;
+            for(int i=0;i<m_rows;i++){
+                for(int j=0;j<m_columns;j++){
+                    m_matrix[i][j]++;;
+                }
+            }
+            return temp;
+        }
+        Matrix operator*(const Matrix& other){
+            if(this->m_columns!=other.m_rows){
+                std::cout<<"Operation can not be done! "<<std::endl;
+                return *(new Matrix(0,0));
+            }
+            else{
+                int sum=0;
+                Matrix* multiplication=new Matrix(this->m_rows,other.m_columns);
+                for(int i=0;i<this->m_rows;i++){
+                    for(int j=0;j<other.m_columns;j++){
+                        for(int k=0;k<this->m_columns;k++){
+                            sum+=(this->m_matrix[i][k])*(other.m_matrix[k][j]);
+                        }
+                        multiplication->m_matrix[i][j]=sum;
+                        sum=0;
+                    }
+                }
+                return *multiplication;
+            }
+        }
     public:
         int getRows(){
             return m_rows;
@@ -138,11 +175,15 @@ int main(int argc, const char* argv[]){
     
     
     Matrix C(4,4);
+    Matrix G(4,5);
     C.init();
+    G.init();
     C.print();
     std::cout<<std::endl;
-    C.rotate();
-    C.print();
+    G.print();
+    Matrix Bla=C*G;
+    std::cout<<std::endl;
+    Bla.print();
     std::cout<<std::endl;
 
     delete A;
