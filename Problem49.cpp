@@ -83,21 +83,21 @@
         Matrix operator*(const Matrix& other){
             if(this->m_columns!=other.m_rows){
                 std::cout<<"Operation can not be done! "<<std::endl;
-                return *(new Matrix(0,0));
+                return Matrix(0,0);
             }
             else{
                 int sum=0;
-                Matrix* multiplication=new Matrix(this->m_rows,other.m_columns);
+                Matrix multiplication(this->m_rows,other.m_columns);
                 for(int i=0;i<this->m_rows;i++){
                     for(int j=0;j<other.m_columns;j++){
                         for(int k=0;k<this->m_columns;k++){
                             sum+=(this->m_matrix[i][k])*(other.m_matrix[k][j]);
                         }
-                        multiplication->m_matrix[i][j]=sum;
+                        multiplication.m_matrix[i][j]=sum;
                         sum=0;
                     }
                 }
-                return *multiplication;
+                return multiplication;
             }
         }
     public:
@@ -169,10 +169,20 @@
         int get(int row,int col){
             return m_matrix[row][col];
         }
+        public:
+        friend  std::ostream& operator <<(std::ostream& os,const Matrix& matrix);
  };
+ std::ostream& operator <<(std::ostream& os,const Matrix& matrix){
+    for(int i=0;i<matrix.m_rows;i++){
+        for(int j=0;j<matrix.m_columns;j++){
+            os<<matrix.m_matrix[i][j]<<" ";
+        }
+        os<<"\n";
+    }
+    return os;
+ }
 int main(int argc, const char* argv[]){
     Matrix* A=new Matrix(4,7);
-    
     
     Matrix C(4,4);
     Matrix G(4,5);
@@ -185,6 +195,7 @@ int main(int argc, const char* argv[]){
     std::cout<<std::endl;
     Bla.print();
     std::cout<<std::endl;
+    std::cout<< C;
 
     delete A;
 
